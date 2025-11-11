@@ -41,7 +41,8 @@ input[type='checkbox'] {
   padding: 0;
   outline: none;
   border: none;
-  -webkit-appearance: none;
+  -webkit-appearance: none; // 保留原前缀
+  appearance: none; // 新增标准属性
   &::placeholder {
     color: #ccc;
   }
@@ -77,6 +78,7 @@ ul {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  line-clamp: 2; // 新增标准属性，解决兼容性警告
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
