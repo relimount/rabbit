@@ -6,7 +6,9 @@
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { componentPlugins } from './components/index.js'
+
 
 // 引入根组件
 import App from './App.vue'
@@ -22,8 +24,11 @@ import { lazyPlugin } from './directives/index'
 // 创建应用实例
 const app = createApp(App)
 
+//创建pinia实例
+const pinia = createPinia()
 // 安装插件
-app.use(createPinia())    // 状态管理
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)    // 状态管理
 app.use(router)           // 路由管理
 app.use(lazyPlugin)       // 自定义指令插件
 app.use(componentPlugins) // 组件插件
