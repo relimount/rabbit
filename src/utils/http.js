@@ -1,20 +1,39 @@
+/**
+ * @description HTTP 请求工具类
+ * @author relimount
+ * @version 1.0.0
+ */
+
 import axios from 'axios'
 
 // 创建axios实例
 const httpInstance = axios.create({
+  // 配置基础URL
   baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
+  // 请求超时时间
   timeout: 5000
 })
 
-// axios请求拦截器
-httpInstance.interceptors.request.use(config => {
-  return config
-}, e => Promise.reject(e))
+// axios请求拦截器 - 在发送请求之前处理
+httpInstance.interceptors.request.use(
+  config => {
+    // 可以在这里添加token等公共请求头
+    return config
+  },
+  error => Promise.reject(error)
+)
 
-// axios响应式拦截器
-httpInstance.interceptors.response.use(res => res.data, e => {
-  return Promise.reject(e)
-})
+// axios响应式拦截器 - 在响应返回后处理
+httpInstance.interceptors.response.use(
+  response => {
+    // 成功响应只返回数据部分
+    return response.data
+  },
+  error => {
+    // 失败响应返回错误信息
+    return Promise.reject(error)
+  }
+)
 
-
+// 导出axios实例
 export default httpInstance

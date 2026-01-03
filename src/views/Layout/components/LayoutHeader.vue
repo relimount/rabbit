@@ -1,28 +1,44 @@
 <script setup>
-  import { useCategoryStore } from '@/stores/category'
-  const categoryStore = useCategoryStore()
+/**
+ * 引入Pinia状态管理
+ */
+import { useCategoryStore } from '@/stores/category'
+
+// 使用分类Store
+const categoryStore = useCategoryStore()
 </script>
 
 <template>
   <header class='app-header'>
     <div class="container">
+      <!-- 网站Logo -->
       <h1 class="logo">
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
+      
+      <!-- 主导航菜单 -->
       <ul class="app-header-nav">
         <li class="home">
           <RouterLink to='/'> 首页 </RouterLink>
         </li>
-        <li class="home" v-for = 'item in categoryStore.categoryList' :key = 'item.id'>
-          <RouterLink :to="`/category/${item.id}`" active-class="active">{{ item.name }}</RouterLink>
+        <!-- 动态生成分类菜单项 -->
+        <li class="home" v-for='item in categoryStore.categoryList' :key='item.id'>
+          <RouterLink 
+            :to="`/category/${item.id}`" 
+            active-class="active"
+          >
+            {{ item.name }}
+          </RouterLink>
         </li>
       </ul>
+      
+      <!-- 搜索框 -->
       <div class="search">
         <i class="iconfont icon-search"></i>
         <input type="text" placeholder="搜一搜">
       </div>
-      <!-- 头部购物车 -->
-
+      
+      <!-- 购物车区域 - 待开发 -->
     </div>
   </header>
 </template>

@@ -1,29 +1,34 @@
+/**
+ * @description 分类相关API接口
+ * @author relimount
+ * @version 1.0.0
+ */
+
 import request from '@/utils/http'
 
 /**
- * @description: 获取分类数据
- * @param {*} id 分类id
- * @return {*}
+ * 获取一级分类数据
+ * @param {string} id - 分类id
+ * @returns {Promise} API响应结果
  */
 export const getTopCategoryAPI = (id) => {
   return request({
-    url:'/category',
-    params:{
+    url: '/category',
+    params: {
       id
     }
   })
 }
 
 /**
- * @description: 获取二级分类列表数据
- * @param {*} id 分类id
- * @return {*}
+ * 获取二级分类筛选数据
+ * @param {string} id - 分类id
+ * @returns {Promise} API响应结果
  */
-
 export const getCategoryFilterAPI = (id) => {
   return request({
-    url:'/category/sub/filter',
-    params:{
+    url: '/category/sub/filter',
+    params: {
       id
     }
   })

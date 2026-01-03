@@ -1,7 +1,11 @@
 <script setup>
+/**
+ * 引入Vue组合式API和工具函数
+ */
 import { ref, watch } from 'vue'
 import { useMouseInElement } from '@vueuse/core'
-// 图片列表
+
+// 图片列表 - 商品的所有图片
 const imageList = [
   "https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png",
   "https://yanxuan-item.nosdn.127.net/e801b9572f0b0c02a52952b01adab967.jpg",
@@ -10,69 +14,102 @@ const imageList = [
   "https://yanxuan-item.nosdn.127.net/f881cfe7de9a576aaeea6ee0d1d24823.jpg"
 ]
 
+// 当前激活的图片索引
 const activeIndex = ref(0)
-//小图列表索引
-const changeIndex = (i)=>{
+
+/**
+ * 切换图片
+ * @param {number} i - 图片索引
+ */
+const changeIndex = (i) => {
   activeIndex.value = i
 }
 
+// 鼠标悬停的目标元素引用
 const target = ref(null)
+// 放大镜滑块的偏移位置
 const left = ref(0)
 const top = ref(0)
 
+// 使用VueUse的鼠标进入元素检测
 const { elementX, elementY, isOutside } = useMouseInElement(target)
 
+// 放大镜背景图的位置
 const positionX = ref(0)
 const positionY = ref(0)
 
-watch([elementX, elementY, isOutside],()=>{
-  if(isOutside.value){
+/**
+ * 监听鼠标位置变化，计算放大镜效果
+ */
+watch([elementX, elementY, isOutside], () => {
+  // 如果鼠标移出图片区域，不显示放大镜
+  if (isOutside.value) {
     return
   }
-  if(elementX.value > 100 && elementX.value < 300){
+
+  // 计算X轴偏移，限制在图片范围内
+  if (elementX.value > 100 && elementX.value < 300) {
     left.value = elementX.value - 100
-  }else if(elementX.value <= 100){
+  } else if (elementX.value <= 100) {
     left.value = 0
-  }else if(elementX.value >= 300){
+  } else if (elementX.value >= 300) {
     left.value = 200
   }
-  if(elementY.value > 100 && elementY.value < 300){
+
+  // 计算Y轴偏移，限制在图片范围内
+  if (elementY.value > 100 && elementY.value < 300) {
     top.value = elementY.value - 100
-  }else if(elementY.value <= 100){
+  } else if (elementY.value <= 100) {
     top.value = 0
-  }else if(elementY.value >= 300){
+  } else if (elementY.value >= 300) {
     top.value = 200
   }
 
+  // 计算放大镜背景图位置（负值实现反向移动，放大效果）
   positionX.value = -left.value * 2
   positionY.value = -top.value * 2
 })
-
 </script>
 
-
 <template>
+  <!-- 图片查看器容器 -->
   <div class="goods-image">
-    <!-- 左侧大图-->
+    <!-- 左侧主图区域 -->
     <div class="middle" ref="target">
+      <!-- 当前激活的图片 -->
       <img :src="imageList[activeIndex]" alt="" />
-      <!-- 蒙层小滑块 -->
-      <div class="layer" :style="{ left: `${left}px`, top: `${top}px` }" v-show="!isOutside"></div>
+      <!-- 放大镜滑块蒙层 -->
+      <div
+        class="layer"
+        :style="{ left: `${left}px`, top: `${top}px` }"
+        v-show="!isOutside"
+      ></div>
     </div>
-    <!-- 小图列表 -->
+
+    <!-- 右侧小图列表 -->
     <ul class="small">
-      <li v-for="(img, i) in imageList" :key="i" @mouseenter="changeIndex(i)" :class="{ active: i === activeIndex }">
+      <li
+        v-for="(img, i) in imageList"
+        :key="i"
+        @mouseenter="changeIndex(i)"
+        :class="{ active: i === activeIndex }"
+      >
         <img :src="img" alt="" />
       </li>
     </ul>
-    <!-- 放大镜大图 -->
-    <div class="large" :style="[
-      {
-        backgroundImage: `url(${imageList[0]})`,
-        backgroundPositionX: `${positionX}px`,
-        backgroundPositionY: `${positionY}px`,
-      },
-    ]"  v-show="!isOutside"></div>
+
+    <!-- 右侧放大镜显示区域 -->
+    <div
+      class="large"
+      :style="[
+        {
+          backgroundImage: `url(${imageList[activeIndex]})`,
+          backgroundPositionX: `${positionX}px`,
+          backgroundPositionY: `${positionY}px`,
+        },
+      ]"
+      v-show="!isOutside"
+    ></div>
   </div>
 </template>
 
