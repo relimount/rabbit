@@ -4,6 +4,9 @@
  * @version 1.0.0
  */
 
+import { ElMessage } from 'element-plus'
+import 'element-plus/theme-chalk/el-message.css'
+
 import axios from 'axios'
 
 // 创建axios实例
@@ -31,9 +34,11 @@ httpInstance.interceptors.response.use(
   },
   error => {
     // 失败响应返回错误信息
+    ElMessage({type:'warning',message:error.response.data.message })
     return Promise.reject(error)
   }
 )
 
 // 导出axios实例
 export default httpInstance
+

@@ -6,6 +6,7 @@
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { componentPlugins } from './components/index.js'
 
 // 引入根组件
 import App from './App.vue'
@@ -25,6 +26,7 @@ const app = createApp(App)
 app.use(createPinia())    // 状态管理
 app.use(router)           // 路由管理
 app.use(lazyPlugin)       // 自定义指令插件
+app.use(componentPlugins) // 组件插件
 
 // 挂载应用
 app.mount('#app')

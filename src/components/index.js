@@ -1,5 +1,5 @@
-import XtxSku from './xtx-sku.vue'
-import ImageView from './image-view.vue'
+import XtxSku from './XtxSku/index.vue'
+import ImageView from './ImageView/index.vue'
 
 export const componentPlugins = {
   install(app) {
