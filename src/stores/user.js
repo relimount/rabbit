@@ -7,7 +7,6 @@ export const useUserStore = defineStore('user', () => {
 
   const getUserInfo = async ({account,password}) => {
     const res = await loginAPI({account,password})
-    console.log('登录响应数据:', res)
 
     // 由于axios拦截器返回response.data，所以res本身就是{ code: "1", msg: "操作成功", result: {...} }
     // 应该直接访问res.result
@@ -18,9 +17,15 @@ export const useUserStore = defineStore('user', () => {
       console.error('登录响应数据格式异常:', res)
     }
   }
+
+  const clearUserInfo = () => {
+    userInfo.value = {}
+  }
+
   return {
     userInfo,
-    getUserInfo
+    getUserInfo,
+    clearUserInfo
   }
 }, {
   persist: true

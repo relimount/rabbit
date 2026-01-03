@@ -6,6 +6,7 @@
 
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
+import { useUserStore } from '@/stores/user'
 
 import axios from 'axios'
 
@@ -20,7 +21,13 @@ const httpInstance = axios.create({
 // axios请求拦截器 - 在发送请求之前处理
 httpInstance.interceptors.request.use(
   config => {
+    // 引入用户状态管理模块
+    const userStore = useUserStore()
     // 可以在这里添加token等公共请求头
+    const token = userStore.userInfo?.token
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   error => Promise.reject(error)
