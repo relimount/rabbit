@@ -3,7 +3,8 @@
 
   const loginForm = ref({
     account: '',
-    password: ''
+    password: '',
+    agree: false
   })
 
   const rules = {
@@ -13,7 +14,31 @@
     password: [
       { required: true, message: '请输入密码', trigger: 'blur' },
       { min: 6, max: 12, message: '密码长度在 6 到 12 个字符', trigger: 'blur' }
+    ],
+    agree: [
+      {
+        validator: (rule,value,callback) => {
+          console.log(rule,value,callback)
+          if (!value) {
+            callback(new Error('请同意隐私条款和服务条款'))
+          } else {
+            callback()
+          }
+        }
+      }
     ]
+  }
+
+  const formRef = ref(null)
+
+  const loginSubmit = () => {
+    formRef.value.validate((valid) => {
+      if (valid) {
+        console.log('登录成功')
+      } else {
+        console.log('登录失败')
+      }
+    })
   }
 
 </script>
@@ -40,7 +65,7 @@
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form label-position="right" :rules = "rules" label-width="60px" :model = "loginForm"
+            <el-form ref="formRef" label-position="right" :rules = "rules" label-width="60px" :model = "loginForm"
               status-icon>
               <el-form-item prop="account" label="账户">
                 <el-input v-model = "loginForm.account"/>
@@ -49,11 +74,11 @@
                 <el-input v-model = "loginForm.password"/>
               </el-form-item>
               <el-form-item label-width="22px">
-                <el-checkbox  size="large">
+                <el-checkbox  size="large" v-model = "loginForm.agree">
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
-              <el-button size="large" class="subBtn">点击登录</el-button>
+              <el-button size="large" class="subBtn" @click="loginSubmit">点击登录</el-button>
             </el-form>
           </div>
         </div>
