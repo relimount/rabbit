@@ -42,6 +42,7 @@
       const {account,password} = loginForm.value
       if (valid) {
         const res = await loginAPI({account,password})
+        console.log(res)
         ElMessage({type:'success',message:'登录成功'})
         router.replace('/')
       } else {
