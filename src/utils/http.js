@@ -7,6 +7,11 @@
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+
+
+
+
 
 import axios from 'axios'
 
@@ -42,6 +47,13 @@ httpInstance.interceptors.response.use(
   error => {
     // 失败响应返回错误信息
     ElMessage({type:'warning',message:error.response.data.message })
+    if(error.response.status === 401) {
+      // 401 未授权 - 清除用户信息
+      useUserStore().clearUserInfo()
+      // 重定向到登录页
+      const router = useRouter()
+      router.replace('/login')
+    }
     return Promise.reject(error)
   }
 )
