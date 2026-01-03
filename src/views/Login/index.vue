@@ -1,4 +1,20 @@
 <script setup>
+  import { ref } from 'vue'
+
+  const loginForm = ref({
+    account: '',
+    password: ''
+  })
+
+  const rules = {
+    account: [
+      { required: true, message: '请输入账户', trigger: 'blur' }
+    ],
+    password: [
+      { required: true, message: '请输入密码', trigger: 'blur' },
+      { min: 6, max: 12, message: '密码长度在 6 到 12 个字符', trigger: 'blur' }
+    ]
+  }
 
 </script>
 
@@ -24,13 +40,13 @@
         </nav>
         <div class="account-box">
           <div class="form">
-            <el-form label-position="right" label-width="60px"
+            <el-form label-position="right" :rules = "rules" label-width="60px" :model = "loginForm"
               status-icon>
-              <el-form-item  label="账户">
-                <el-input/>
+              <el-form-item prop="account" label="账户">
+                <el-input v-model = "loginForm.account"/>
               </el-form-item>
-              <el-form-item label="密码">
-                <el-input/>
+              <el-form-item prop="password" label="密码">
+                <el-input v-model = "loginForm.password"/>
               </el-form-item>
               <el-form-item label-width="22px">
                 <el-checkbox  size="large">
